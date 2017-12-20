@@ -22,6 +22,9 @@ import java.util.List;
 
 public class TodoFragment extends Fragment {
     MyAdapter adapter = null;
+    List<Todostuff> list;
+    MyDBHelper helper;
+    RecyclerView recyclerView;
     int  idArray [] = new int [100];
     static final String NOT_DONE="0";
     int NUM=0;
@@ -36,13 +39,12 @@ public class TodoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {super.onCreate(savedInstanceState);}
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.fragment_todo, container, false);
         if(view instanceof RecyclerView) {
             Context context = view.getContext();
-            List<Todostuff> list = new ArrayList<>();
-            MyDBHelper helper = new MyDBHelper(getActivity());
+            list = new ArrayList<>();
+            helper = new MyDBHelper(getActivity());
             Cursor cursor = helper.getReadableDatabase().query("exp", null,
                     "done=?", new String[]{NOT_DONE}, null, null, null);
             if (cursor.moveToFirst()) {
@@ -58,12 +60,10 @@ public class TodoFragment extends Fragment {
                 } while (cursor.moveToNext());
             }
 
-            cursor.close();
-            helper.close();
 
             adapter = new MyAdapter(list);
 
-            RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             recyclerView.addItemDecoration(new DividerListItemDecoration(getContext(),
                     LinearLayoutManager.VERTICAL));
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -106,8 +106,6 @@ public class TodoFragment extends Fragment {
 
     private void ItemClickMethod(int done_id,int position) {
         String id = String.valueOf(done_id);
-        System.out.println(id);
-        System.out.println(position+"已被改為完成");
         MyDBHelper dbHelper = new MyDBHelper(getActivity());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
@@ -115,8 +113,26 @@ public class TodoFragment extends Fragment {
         values.put("done","1");
         db.update("exp",values,"_id=?",new String[]{id});
         adapter.updateData(position);
-        db.close();
-        dbHelper.close();
+
+        NUM = 0;
+        list.clear();
+        helper = new MyDBHelper(getActivity());
+        Cursor cursor = helper.getReadableDatabase().query("exp", null,
+                "done=?", new String[]{NOT_DONE}, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Todostuff todostuff = new Todostuff();
+                todostuff.setDate(cursor.getString(1));
+                todostuff.setInfo(cursor.getString(2));
+                list.add(todostuff);
+
+                idArray [NUM] = cursor.getInt(0);
+                System.out.println("idArray[]"+NUM+"::"+idArray[NUM]);
+                NUM++;
+            } while (cursor.moveToNext());
+        }
+        MainActivity a = (MainActivity)getActivity();
+        a.getAdapter().reLoad();
     }
 
     public void ItemLongClickMethod (int del_id,int position){
@@ -127,7 +143,25 @@ public class TodoFragment extends Fragment {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete("exp","_id=?", new String[]{id});
         adapter.removeData(position);
-        db.close();
-        dbHelper.close();
+
+        NUM = 0;
+        list = new ArrayList<>();
+        helper = new MyDBHelper(getActivity());
+        Cursor cursor = helper.getReadableDatabase().query("exp", null,
+                "done=?", new String[]{NOT_DONE}, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Todostuff todostuff = new Todostuff();
+                todostuff.setDate(cursor.getString(1));
+                todostuff.setInfo(cursor.getString(2));
+                list.add(todostuff);
+
+                idArray [NUM] = cursor.getInt(0);
+                System.out.println("idArray[]"+NUM+"::"+idArray[NUM]);
+                NUM++;
+            } while (cursor.moveToNext());
+        }
+        adapter = new MyAdapter(list);
+        recyclerView.setAdapter(adapter);
     }
 }

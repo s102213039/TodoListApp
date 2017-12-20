@@ -1,12 +1,11 @@
 package com.example.yychiu.todolistapp;
 
+import com.example.yychiu.todolistapp.MyPagerAdapter.OnReloadListener;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+
 /*
     private FragmentManager fragmentManager;
     private TodoFragment todoFragment;
@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
         initViews();
         tab.setDrawFullUnderline(false);
-        pager.setAdapter(pagerAdapter);
 /*
         todoFragment = TodoFragment.newInstance();
         fragmentManager = getSupportFragmentManager();
@@ -62,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 
     private void initViews() {
         pager = findViewById(R.id.vpager);
@@ -79,6 +79,18 @@ public class MainActivity extends AppCompatActivity {
         fragList.add(new TodoFragment());
         fragList.add(new DoneFragment());
         pagerAdapter = new MyPagerAdapter(getSupportFragmentManager(),fragList,titleList);
+        pagerAdapter.setOnReloadListener(new OnReloadListener() {
+            @Override
+            public void onReload() {
+                fragList =null;
+                List<Fragment> list = new ArrayList<>();
+                list.add(new TodoFragment());
+                list.add(new DoneFragment());
+                pagerAdapter.setPagerItems(list);
+                pager.setAdapter(pagerAdapter);
+            }
+        });
+        pager.setAdapter(pagerAdapter);
     }
 
     @Override
@@ -101,5 +113,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+    public MyPagerAdapter getAdapter(){
+        return pagerAdapter;
     }
 }

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +20,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DoneFragment extends Fragment {
+    List<Todostuff> list;
+    MyDBHelper helper;
+    RecyclerView recyclerView;
     MyAdapter adapter = null;
     static final String DONE ="1";
     int idArray [] = new int[100];
     int NUM = 0;
 
+
     public DoneFragment() {}
 
-    public static DoneFragment newInstance(String param1, String param2) {return new DoneFragment();}
+    public static DoneFragment newInstance() {return new DoneFragment();}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {super.onCreate(savedInstanceState);}
@@ -37,8 +42,8 @@ public class DoneFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_done,null);
         if(view instanceof RecyclerView) {
             Context context = view.getContext();
-            List<Todostuff> list = new ArrayList<>();
-            MyDBHelper helper = new MyDBHelper(getActivity());
+            list = new ArrayList<>();
+            helper = new MyDBHelper(getActivity());
             Cursor cursor = helper.getReadableDatabase().query("exp", null,
                     "done=?", new String[]{DONE}, null, null, null);
             if (cursor.moveToFirst()) {
@@ -52,12 +57,10 @@ public class DoneFragment extends Fragment {
                 } while (cursor.moveToNext());
             }
 
-            cursor.close();
-            helper.close();
 
             adapter = new MyAdapter(list);
 
-            RecyclerView recyclerView = (RecyclerView) view;
+            recyclerView = (RecyclerView) view;
             recyclerView.addItemDecoration(new DividerListItemDecoration(getContext(),
                     LinearLayoutManager.VERTICAL));
             recyclerView.setLayoutManager(new LinearLayoutManager(context));
@@ -88,13 +91,34 @@ public class DoneFragment extends Fragment {
 
     public void ItemLongClickMethod (int del_id,int position){
         String id = String.valueOf(del_id);
-        System.out.println(id);
-        System.out.println("刪除第"+position);
+        System.out.println("_id:"+id);
+        System.out.println("刪除第"+position+"位置的list");
         MyDBHelper dbHelper = new MyDBHelper(getActivity());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete("exp","_id=?", new String[]{id});
         adapter.removeData(position);
-        db.close();
-        dbHelper.close();
+
+        NUM=0;
+        list = new ArrayList<>();
+        helper = new MyDBHelper(getActivity());
+        Cursor cursor = helper.getReadableDatabase().query("exp", null,
+                "done=?", new String[]{DONE}, null, null, null);
+        if (cursor.moveToFirst()) {
+            do {
+                Todostuff todostuff = new Todostuff();
+                todostuff.setDate(cursor.getString(1));
+                todostuff.setInfo(cursor.getString(2));
+                list.add(todostuff);
+                idArray[NUM] = cursor.getInt(0);
+                NUM++;
+            } while (cursor.moveToNext());
+        }
+        adapter = new MyAdapter(list);
+        recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 }
