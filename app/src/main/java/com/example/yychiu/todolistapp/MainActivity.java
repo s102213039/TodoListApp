@@ -46,13 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
         initViews();
         tab.setDrawFullUnderline(false);
-/*
-        todoFragment = TodoFragment.newInstance();
-        fragmentManager = getSupportFragmentManager();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.add(R.id.fragment_container,todoFragment);
-        transaction.commit();
-*/
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override

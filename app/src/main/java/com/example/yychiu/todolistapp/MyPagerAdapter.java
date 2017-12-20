@@ -39,12 +39,9 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
         return fragList.size();
     }
 
-    public void setPagerItems(List<Fragment> items)
-    {
-        if (items != null)
-        {
-            for (int i = 0; i < fragList.size(); i++)
-            {
+    public void setPagerItems(List<Fragment> items) {
+        if (items != null) {
+            for (int i = 0; i < fragList.size(); i++) {
                 fragmentManager.beginTransaction().remove(fragList.get(i)).commit();
             }
             fragList = items;

@@ -91,8 +91,6 @@ public class DoneFragment extends Fragment {
 
     public void ItemLongClickMethod (int del_id,int position){
         String id = String.valueOf(del_id);
-        System.out.println("_id:"+id);
-        System.out.println("刪除第"+position+"位置的list");
         MyDBHelper dbHelper = new MyDBHelper(getActivity());
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         db.delete("exp","_id=?", new String[]{id});

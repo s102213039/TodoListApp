@@ -34,7 +34,6 @@ public class CreateActivity extends AppCompatActivity {
                 values.put("cdate",cdate);
                 values.put("done",BOOLEAN);
                 myDBHelper.getWritableDatabase().insert("exp",null,values);
-                Log.d("----->","success");
 
                 startActivity(new Intent(CreateActivity.this,MainActivity.class));
             }
