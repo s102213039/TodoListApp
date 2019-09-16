@@ -8,18 +8,19 @@ import android.database.sqlite.SQLiteOpenHelper;
  * Created by yychiu on 2017/11/29.
  */
 
-public class MyDBHelper extends SQLiteOpenHelper{
+public class MyDBHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "mydb.db";
     private static final int VERSION = 2;
+
     public MyDBHelper(Context context) {
         super(context, DB_NAME, null, VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String sql = "CREATE TABLE main.exp "+"(_id INTEGER PRIMARY KEY NOT NULL, "+
-                "cdate DATETIME NOT NULL ,"+"info VARCHAR , "+"done BOOLEAN NOT NULL)";
+        String sql = "CREATE TABLE main.exp " + "(_id INTEGER PRIMARY KEY NOT NULL, " +
+                "cdate DATETIME NOT NULL ," + "info VARCHAR , " + "done BOOLEAN NOT NULL)";
         db.execSQL(sql);
     }
 

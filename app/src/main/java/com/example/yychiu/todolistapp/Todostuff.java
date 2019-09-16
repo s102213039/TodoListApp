@@ -9,7 +9,8 @@ public class Todostuff {
     String info;
     boolean done;
 
-    public Todostuff(){}
+    public Todostuff() {
+    }
 
     public Todostuff(String date, String info, boolean done) {
         this.date = date;

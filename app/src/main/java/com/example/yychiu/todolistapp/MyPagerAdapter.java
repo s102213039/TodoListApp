@@ -1,9 +1,8 @@
 package com.example.yychiu.todolistapp;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import java.util.List;
 
@@ -17,9 +16,9 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
     private OnReloadListener listener;
     private FragmentManager fragmentManager;
 
-    public MyPagerAdapter(FragmentManager fm, List<Fragment> fragList , List<String> titleList) {
+    public MyPagerAdapter(FragmentManager fm, List<Fragment> fragList, List<String> titleList) {
         super(fm);
-        fragmentManager =fm;
+        fragmentManager = fm;
         this.fragList = fragList;
         this.titleList = titleList;
     }
@@ -48,17 +47,18 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
         }
     }
 
-    public void reLoad(){
-        if(listener!=null){
+    public void reLoad() {
+        if (listener != null) {
             listener.onReload();
         }
         this.notifyDataSetChanged();
     }
-    public void setOnReloadListener(OnReloadListener onReloadListener){
-        this.listener=onReloadListener;
+
+    public void setOnReloadListener(OnReloadListener onReloadListener) {
+        this.listener = onReloadListener;
     }
 
-    public  interface OnReloadListener{
+    public interface OnReloadListener {
         void onReload();
     }
 }

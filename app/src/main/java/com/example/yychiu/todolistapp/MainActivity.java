@@ -1,18 +1,19 @@
 package com.example.yychiu.todolistapp;
 
-import com.example.yychiu.todolistapp.MyPagerAdapter.OnReloadListener;
-
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
-import android.support.v4.view.PagerTabStrip;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.viewpager.widget.PagerTabStrip;
+import androidx.viewpager.widget.ViewPager;
+
+import com.example.yychiu.todolistapp.MyPagerAdapter.OnReloadListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private MyPagerAdapter pagerAdapter = null;
     private View[] views = new View[2];
     private int[] viewId = {R.layout.fragment_todo, R.layout.fragment_done};
-    private String[] titleStr = {"待辦事項","已完成"};
+    private String[] titleStr = {"待辦事項", "已完成"};
 
     private List<View> viewList = null;
     private List<String> titleList = null;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),CreateActivity.class));
+                startActivity(new Intent(getApplicationContext(), CreateActivity.class));
             }
         });
     }
@@ -71,11 +72,11 @@ public class MainActivity extends AppCompatActivity {
 
         fragList.add(new TodoFragment());
         fragList.add(new DoneFragment());
-        pagerAdapter = new MyPagerAdapter(getSupportFragmentManager(),fragList,titleList);
+        pagerAdapter = new MyPagerAdapter(getSupportFragmentManager(), fragList, titleList);
         pagerAdapter.setOnReloadListener(new OnReloadListener() {
             @Override
             public void onReload() {
-                fragList =null;
+                fragList = null;
                 List<Fragment> list = new ArrayList<>();
                 list.add(new TodoFragment());
                 list.add(new DoneFragment());
@@ -107,7 +108,8 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    public MyPagerAdapter getAdapter(){
+
+    public MyPagerAdapter getAdapter() {
         return pagerAdapter;
     }
 }

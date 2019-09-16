@@ -1,10 +1,11 @@
 package com.example.yychiu.todolistapp;
 
-import android.support.v4.view.GestureDetectorCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.core.view.GestureDetectorCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by yychiu on 2017/12/2.
@@ -16,6 +17,7 @@ public class ItemClickListener extends RecyclerView.SimpleOnItemTouchListener {
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
+
         void onItemLongClick(View view, int position);
     }
 
